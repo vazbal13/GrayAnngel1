@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard de Pedidos - Gray Anngel</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #C8A165;
+    }
+    .metric {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #fff;
+      border-left: 4px solid #C8A165;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    canvas {
+      margin-top: 2rem;
+      background: #fff;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dashboard de Pedidos</h1>
+
+  <div id="resumen">
+    <div class="metric" id="total-pedidos">Total de pedidos: …</div>
+    <div class="metric" id="total-productos">Total de productos vendidos: …</div>
+  </div>
+
+  <canvas id="grafico-productos" height="120"></canvas>
+
+  <script>
+    const URL = "https://script.google.com/macros/s/AKfycbyBLUP_wL4_UrLoN2-HIrI0qab_U9ewpZUbqVM3BLLfZyNVg54_GYwJ-b7IFyee7Kfy/exec"; // ← pega aquí tu URL de Apps Script
+
+    fetch(URL)
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById("total-pedidos").textContent = `Total de pedidos: ${data.length}`;
+
+        const totalUnidades = data.reduce((acc, fila) => acc + Number(fila.cantidad || 1), 0);
+        document.getElementById("total-productos").textContent = `Total de productos vendidos: ${totalUnidades}`;
+
+        const conteo = {};
+        data.forEach(fila => {
+          const p = fila.producto || "Desconocido";
+          conteo[p] = (conteo[p] || 0) + Number(fila.cantidad || 1);
+        });
+
+        const ctx = document.getElementById("grafico-productos").getContext("2d");
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: Object.keys(conteo),
+            datasets: [{
+              label: 'Unidades por producto',
+              data: Object.values(conteo),
+              backgroundColor: '#C8A165'
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      })
+      .catch(err => {
+        alert("Error al cargar datos. Revisa consola.");
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
