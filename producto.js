@@ -8,6 +8,13 @@ async function cargarDetalle() {
   const descEl   = document.getElementById("descripcion-producto");
   const imgEl    = document.getElementById("imagen-principal");
 
+   // Loader y contenedor
+  const loader = document.getElementById("loader");
+  const detalle = document.getElementById("detalle-producto");
+
+  loader.style.display = "block";   // mostrar loader
+  detalle.style.display = "none";   // ocultar contenido
+
   try {
     const res = await fetch(CATALOGO_URL);
     const productos = await res.json();
@@ -50,3 +57,4 @@ async function cargarDetalle() {
 }
 
 document.addEventListener("DOMContentLoaded", cargarDetalle);
+
