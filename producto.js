@@ -8,7 +8,7 @@ async function cargarDetalle() {
   const descEl   = document.getElementById("descripcion-producto");
   const imgEl    = document.getElementById("imagen-principal");
 
-   // Loader y contenedor
+  // Loader y contenedor
   const loader = document.getElementById("loader");
   const detalle = document.getElementById("detalle-producto");
 
@@ -53,8 +53,12 @@ async function cargarDetalle() {
   } catch (err) {
     console.error("Error al cargar detalle:", err);
     nombreEl.textContent = "Error al cargar producto";
+  } finally {
+    loader.style.display = "none";   // ocultar loader
+    detalle.style.display = "block"; // mostrar contenido
   }
 }
 
 document.addEventListener("DOMContentLoaded", cargarDetalle);
+
 
