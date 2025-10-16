@@ -230,4 +230,77 @@ footer {
   to { transform: rotate(360deg); }
 }
 
+/* BOTÓN HAMBURGUESA */
+.menu-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: var(--grisOscuro);
+  color: var(--blanco);
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 1100;
+  border-radius: 4px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px; /* oculto por defecto */
+  width: 250px;
+  height: 100%;
+  background: var(--grisOscuro);
+  color: var(--blanco);
+  transition: left 0.3s ease;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 2px solid var(--dorado);
+}
+
+.sidebar-header .logo {
+  height: 40px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--blanco);
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.sidebar-nav a {
+  color: var(--blanco);
+  text-decoration: none;
+  padding: 0.8rem 0;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.sidebar-nav a:hover {
+  color: var(--dorado);
+}
+
+
 
