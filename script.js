@@ -72,4 +72,24 @@ document.addEventListener("DOMContentLoaded", () => {
   cargarCatalogo();
   cargarVendedores();
   cargarUbicaciones();
+
+});
+// Sidebar toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.getElementById("sidebar");
+  const toggleBtn = document.querySelector(".menu-toggle");
+  const closeBtn = document.querySelector(".close-btn");
+
+  toggleBtn.addEventListener("click", () => {
+    sidebar.classList.add("active");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+  });
+
+  // Cerrar al hacer clic en un enlace
+  document.querySelectorAll(".sidebar-nav a").forEach(link => {
+    link.addEventListener("click", () => sidebar.classList.remove("active"));
+  });
 });
