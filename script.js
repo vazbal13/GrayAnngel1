@@ -22,16 +22,53 @@ async function cargarCatalogo() {
           <h3>${p.nombre}</h3>
           <p>${p.precio}</p>
         </a>
+        <div class="card-actions">
+          <button class="btn-mini copiar-ref" data-id="${index}">📋 Copiar pedido</button>
+        </div>
       `;
       gal.appendChild(card);
     });
 
     inicializarFiltros();
+    inicializarCopiarDesdeGaleria(productos);
 
   } catch (err) {
     console.error("Error al cargar catálogo:", err);
     gal.innerHTML = "<p>No se pudo cargar la galería.</p>";
   }
+}
+
+function inicializarCopiarDesdeGaleria(productos) {
+  document.querySelectorAll(".copiar-ref").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = parseInt(btn.dataset.id, 10);
+      const p = productos[id];
+      const urlDetalle = `${location.origin}${location.pathname.replace("index.html","")}producto.html?id=${id}`;
+
+      const mensaje = [
+        "Hola 👋, quiero pedir este producto:",
+        `• Nombre: ${p.nombre}`,
+        `• Precio: ${p.precio || "Consultar"}`,
+        p.descripcion ? `• Descripción: ${p.descripcion}` : "",
+        p.imagen ? `• Imagen: ${p.imagen}` : "",
+        `• Link: ${urlDetalle}`,
+        "¿Me confirmas disponibilidad y tiempos de entrega?"
+      ].filter(Boolean).join("\n");
+
+      try {
+        await navigator.clipboard.writeText(mensaje);
+        alert("Pedido copiado ✅ Ahora pégalo en WhatsApp");
+      } catch {
+        const area = document.createElement("textarea");
+        area.value = mensaje;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        document.body.removeChild(area);
+        alert("Pedido copiado ✅ Ahora pégalo en WhatsApp");
+      }
+    });
+  });
 }
 
 function inicializarFiltros() {
@@ -124,4 +161,5 @@ document.addEventListener("DOMContentLoaded", () => {
     link.addEventListener("click", () => sidebar.classList.remove("active"));
   });
 });
+
 
