@@ -31,6 +31,7 @@ body {
 }
 .logo {
   height: 50px;
+  
 }
 .main-nav a {
   color: var(--blanco);
@@ -300,6 +301,7 @@ footer {
 .sidebar-nav a:hover {
   color: var(--dorado);
 }
+
 
 
 
