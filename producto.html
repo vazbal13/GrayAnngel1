@@ -14,50 +14,33 @@
   </header>
 
   <main class="container">
-    <div id="detalle-producto" class="detalle-producto">
-      <!-- Loader dorado -->
-      <div id="loader" class="loader"></div>
-
-      <!-- Carrusel con flechas -->
-      <div class="carrusel">
-        <button class="flecha izquierda" aria-label="Imagen anterior">&#10094;</button>
-        <img id="imagen-principal" src="" alt="Producto">
-        <button class="flecha derecha" aria-label="Imagen siguiente">&#10095;</button>
-      </div>
-
-      <!-- Puntitos indicadores del carrusel -->
-      <div class="indicadores"></div>
-
-      <!-- Datos del producto -->
-      <h2 id="nombre-producto"></h2>
-      <p id="precio-producto"></p>
-      <p id="descripcion-producto"></p>
-
-      <!-- Botón discreto para copiar pedido -->
-      <div class="pedido-whatsapp">
-        <button id="copiar-pedido" class="btn-mini">📋 Copiar pedido</button>
-        <span id="toast" class="toast" aria-live="polite">Pedido copiado ✅</span>
-      </div>
-
-      <p><a href="index.html" class="volver">⬅ Volver a la galería</a></p>
+  <div id="detalle-producto" class="detalle-producto">
+    <div class="carrusel">
+      <button class="flecha izquierda">&#10094;</button>
+      <img id="imagen-principal" src="" alt="Producto">
+      <button class="flecha derecha">&#10095;</button>
     </div>
-  </main>
+    <h2 id="nombre-producto"></h2>
+    <p id="precio-producto"></p>
+    <p id="descripcion-producto"></p>
+    <div class="pedido-whatsapp">
+  <button id="copiar-pedido" class="btn-mini">📋 Copiar pedido</button>
+  <span id="toast" class="toast" aria-live="polite">Pedido copiado ✅</span>
+</div>
+
+    <p><a href="index.html" class="volver">⬅ Volver a la galería</a></p>
+  </div>
+</main>
 
   <footer>
     <img src="img/logo.PNG" alt="Gray Anngel Logo" class="logo" />
     <p>🌐 Creado desde México | Versión 1.0 | 2025</p>
   </footer>
-
-  <!-- Botón flotante de WhatsApp -->
   <a href="https://wa.me/message/MBDLTGZGKVDUF1" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
-    <img src="img/whatsapp.png" alt="WhatsApp" />
-  </a>
-
-  <!-- Script del detalle de producto -->
+  <img src="img/whatsapp.png" alt="WhatsApp" />
   <script src="producto.js"></script>
 </body>
 </html>
-```
 
 
 
