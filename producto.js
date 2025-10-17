@@ -1,18 +1,12 @@
 const CATALOGO_URL = "https://script.google.com/macros/s/AKfycbxFF71yVoqvsW4LmhuYJ4aWh7Jtz5dyhVWwUPrsRvLtJz-oMN4ZyKTLKn9Aho34bjIgcg/exec";
 
-let imagenes = [];
-let indice = 0;
-let imgEl;
-let indicadores;
-
 async function cargarDetalle() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
   const nombreEl = document.getElementById("nombre-producto");
   const precioEl = document.getElementById("precio-producto");
   const descEl   = document.getElementById("descripcion-producto");
-  imgEl          = document.getElementById("imagen-principal");
-  indicadores    = document.querySelector(".indicadores");
+  const imgEl    = document.getElementById("imagen-principal");
 
   try {
     const res = await fetch(CATALOGO_URL);
@@ -30,80 +24,24 @@ async function cargarDetalle() {
     descEl.textContent   = producto.descripcion || "Próximamente...";
 
     // Manejo de imágenes
-    imagenes = [producto.imagen];
+    let imagenes = [producto.imagen];
     if (producto.imagenes) {
       imagenes = imagenes.concat(producto.imagenes.split(",").map(url => url.trim()));
     }
 
-    indice = 0;
+    let indice = 0;
     imgEl.src = imagenes[indice];
-
-    // Crear puntitos indicadores
-    if (indicadores) {
-      indicadores.innerHTML = "";
-      imagenes.forEach((_, i) => {
-        const dot = document.createElement("span");
-        dot.className = "dot" + (i === indice ? " activo" : "");
-        dot.addEventListener("click", () => {
-          indice = i;
-          actualizarImagen();
-        });
-        indicadores.appendChild(dot);
-      });
-    }
 
     // Flechas
     document.querySelector(".flecha.izquierda").addEventListener("click", () => {
       indice = (indice - 1 + imagenes.length) % imagenes.length;
-      actualizarImagen();
+      imgEl.src = imagenes[indice];
     });
 
     document.querySelector(".flecha.derecha").addEventListener("click", () => {
       indice = (indice + 1) % imagenes.length;
-      actualizarImagen();
+      imgEl.src = imagenes[indice];
     });
-
-    // Swipe táctil
-    let startX = 0;
-    let endX = 0;
-    const carrusel = document.querySelector(".carrusel");
-    carrusel.addEventListener("touchstart", e => {
-      startX = e.touches[0].clientX;
-    });
-    carrusel.addEventListener("touchend", e => {
-      endX = e.changedTouches[0].clientX;
-      const diff = endX - startX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) {
-          indice = (indice - 1 + imagenes.length) % imagenes.length;
-        } else {
-          indice = (indice + 1) % imagenes.length;
-        }
-        actualizarImagen();
-      }
-    });
-
-    // Botón copiar pedido
-    const copiarBtn = document.getElementById("copiar-pedido");
-    if (copiarBtn) {
-      copiarBtn.addEventListener("click", async () => {
-        const urlDetalle = window.location.href;
-        const mensaje = buildMensajePedido(producto, urlDetalle, imgEl?.src || "");
-
-        try {
-          await navigator.clipboard.writeText(mensaje);
-          showToast("Pedido copiado ✅");
-        } catch {
-          const area = document.createElement("textarea");
-          area.value = mensaje;
-          document.body.appendChild(area);
-          area.select();
-          document.execCommand("copy");
-          document.body.removeChild(area);
-          showToast("Pedido copiado ✅");
-        }
-      });
-    }
 
   } catch (err) {
     console.error("Error al cargar detalle:", err);
@@ -111,15 +49,7 @@ async function cargarDetalle() {
   }
 }
 
-function actualizarImagen() {
-  imgEl.src = imagenes[indice];
-  if (indicadores) {
-    document.querySelectorAll(".dot").forEach((dot, i) => {
-      dot.classList.toggle("activo", i === indice);
-    });
-  }
-}
-
+document.addEventListener("DOMContentLoaded", cargarDetalle);
 function buildMensajePedido(producto, urlDetalle, imagenActual) {
   const precio = producto.precio ? producto.precio : "Consultar";
   const descripcion = producto.descripcion ? producto.descripcion : "Sin descripción";
@@ -142,9 +72,33 @@ function showToast(msg = "Pedido copiado ✅") {
   setTimeout(() => toast.classList.remove("visible"), 2000);
 }
 
-document.addEventListener("DOMContentLoaded", cargarDetalle);
+document.addEventListener("DOMContentLoaded", () => {
+  const copiarBtn = document.getElementById("copiar-pedido");
+  const imgEl = document.getElementById("imagen-principal");
 
+  if (copiarBtn) {
+    copiarBtn.addEventListener("click", async () => {
+      const nombre = document.getElementById("nombre-producto").textContent;
+      const precio = document.getElementById("precio-producto").textContent.replace("Precio: ", "");
+      const descripcion = document.getElementById("descripcion-producto").textContent;
+      const imagenActual = imgEl?.src || "";
+      const urlDetalle = window.location.href;
 
+      const producto = { nombre, precio, descripcion };
+      const mensaje = buildMensajePedido(producto, urlDetalle, imagenActual);
 
-
-
+      try {
+        await navigator.clipboard.writeText(mensaje);
+        showToast("Pedido copiado ✅");
+      } catch {
+        const area = document.createElement("textarea");
+        area.value = mensaje;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        document.body.removeChild(area);
+        showToast("Pedido copiado ✅");
+      }
+    });
+  }
+});
