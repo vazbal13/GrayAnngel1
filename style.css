@@ -302,6 +302,31 @@ footer {
   color: var(--dorado);
 }
 
+/* FILTROS */
+.filtros {
+  text-align: center;
+  margin: 2rem 0 1rem;
+}
+.filtros button {
+  background: var(--grisClaro);
+  border: 1px solid var(--dorado);
+  color: var(--grisOscuro);
+  margin: 0.3rem;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  border-radius: 20px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+.filtros button:hover {
+  background: var(--dorado);
+  color: var(--blanco);
+}
+.filtros button.activo {
+  background: var(--dorado);
+  color: var(--blanco);
+}
+
 
 
 
