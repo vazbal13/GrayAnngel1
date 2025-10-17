@@ -60,5 +60,58 @@ async function cargarDetalle() {
 }
 
 document.addEventListener("DOMContentLoaded", cargarDetalle);
+function buildMensajePedido(producto, urlDetalle, imagenActual) {
+  const precio = producto.precio ? producto.precio : "Consultar";
+  const descripcion = producto.descripcion ? producto.descripcion : "Sin descripción";
+  return [
+    "Hola 👋, quiero pedir este producto:",
+    `• Nombre: ${producto.nombre}`,
+    `• Precio: ${precio}`,
+    `• Descripción: ${descripcion}`,
+    imagenActual ? `• Imagen: ${imagenActual}` : "",
+    `• Link: ${urlDetalle}`,
+    "¿Me confirmas disponibilidad y tiempos de entrega?"
+  ].filter(Boolean).join("\n");
+}
+
+function showToast(msg = "Pedido copiado ✅") {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add("visible");
+  setTimeout(() => toast.classList.remove("visible"), 2000);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const copiarBtn = document.getElementById("copiar-pedido");
+  const imgEl = document.getElementById("imagen-principal");
+
+  if (copiarBtn) {
+    copiarBtn.addEventListener("click", async () => {
+      const nombre = document.getElementById("nombre-producto").textContent;
+      const precio = document.getElementById("precio-producto").textContent.replace("Precio: ", "");
+      const descripcion = document.getElementById("descripcion-producto").textContent;
+      const imagenActual = imgEl?.src || "";
+      const urlDetalle = window.location.href;
+
+      const producto = { nombre, precio, descripcion };
+      const mensaje = buildMensajePedido(producto, urlDetalle, imagenActual);
+
+      try {
+        await navigator.clipboard.writeText(mensaje);
+        showToast("Pedido copiado ✅");
+      } catch {
+        const area = document.createElement("textarea");
+        area.value = mensaje;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        document.body.removeChild(area);
+        showToast("Pedido copiado ✅");
+      }
+    });
+  }
+});
+
 
 
