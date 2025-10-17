@@ -9,21 +9,52 @@ async function cargarCatalogo() {
     const res = await fetch(CATALOGO_URL);
     const productos = await res.json();
 
+    gal.innerHTML = "";
+
     productos.forEach((p, index) => {
       const card = document.createElement("div");
       card.className = "card";
+      card.dataset.tags = p.tags ? p.tags.toLowerCase() : "";
+
       card.innerHTML = `
         <a href="producto.html?id=${index}">
-        <img src="${p.imagen}" alt="${p.nombre}">
-        <h3>${p.nombre}</h3>
-        <p>${p.precio}</p>
+          <img src="${p.imagen}" alt="${p.nombre}" loading="lazy">
+          <h3>${p.nombre}</h3>
+          <p>${p.precio}</p>
+        </a>
       `;
       gal.appendChild(card);
     });
+
+    inicializarFiltros();
+
   } catch (err) {
     console.error("Error al cargar catálogo:", err);
     gal.innerHTML = "<p>No se pudo cargar la galería.</p>";
   }
+}
+
+function inicializarFiltros() {
+  const botones = document.querySelectorAll(".filtros button");
+  const cards = document.querySelectorAll(".card");
+
+  botones.forEach(btn => {
+    btn.addEventListener("click", () => {
+      // Quitar clase activo de todos
+      botones.forEach(b => b.classList.remove("activo"));
+      btn.classList.add("activo");
+
+      const tag = btn.dataset.tag;
+
+      cards.forEach(card => {
+        if (tag === "todos" || card.dataset.tags.includes(tag)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
 }
 async function cargarVendedores() {
   const contenedor = document.querySelector(".vendedores");
@@ -93,3 +124,4 @@ document.addEventListener("DOMContentLoaded", () => {
     link.addEventListener("click", () => sidebar.classList.remove("active"));
   });
 });
+
