@@ -350,6 +350,51 @@ footer {
   border-color: var(--dorado);
   opacity: 1;
 }
+.pedido-whatsapp {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.btn-mini {
+  background: transparent;
+  color: var(--grisOscuro);
+  border: 1px solid var(--grisClaro);
+  border-radius: 12px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+.btn-mini:hover {
+  background: var(--dorado);
+  color: var(--blanco);
+  border-color: var(--dorado);
+  opacity: 1;
+}
+
+/* Toast de confirmación */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--grisOscuro);
+  color: var(--blanco);
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1300;
+}
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 
 
 
