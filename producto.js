@@ -69,21 +69,30 @@ async function cargarDetalle() {
     });
 
     let startX = 0;
-    let endX = 0;
-    const carrusel = document.querySelector(".carrusel");
-    carrusel.addEventListener("touchstart", e => {
-      startX = e.touches[0].clientX;
-    });
-    carrusel.addEventListener("touchend", e => {
-      endX = e.changedTouches[0].clientX;
-      const diff = endX - startX;
-      if (Math.abs(diff) > 50) {
-        indice = diff > 0
-          ? (indice - 1 + imagenes.length) % imagenes.length
-          : (indice + 1) % imagenes.length;
-        actualizarImagen();
-      }
-    });
+let endX = 0;
+const carrusel = document.querySelector(".carrusel");
+
+carrusel.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+}, { passive: true });
+
+carrusel.addEventListener("touchmove", e => {
+  // Evita que la pantalla se desplace verticalmente
+  e.preventDefault();
+}, { passive: false });
+
+carrusel.addEventListener("touchend", e => {
+  endX = e.changedTouches[0].clientX;
+  const diff = endX - startX;
+
+  if (Math.abs(diff) > 50) {
+    indice = diff > 0
+      ? (indice - 1 + imagenes.length) % imagenes.length
+      : (indice + 1) % imagenes.length;
+    actualizarImagen();
+  }
+});
+
 
   } catch (err) {
     console.error("Error al cargar detalle:", err);
@@ -104,3 +113,4 @@ function actualizarImagen() {
 }
 
 document.addEventListener("DOMContentLoaded", cargarDetalle);
+
