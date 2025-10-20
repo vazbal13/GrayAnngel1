@@ -28,8 +28,107 @@ async function cargarCatalogo() {
       `;
       gal.appendChild(card);
     });
-
+    inicializarBuscadorConLista(productos);
     inicializarFiltros();
+
+    function inicializarBuscadorConLista(productos) {
+  const input = document.getElementById("busqueda-modelo");
+  const lista = document.getElementById("sugerencias");
+  const cards = document.querySelectorAll(".card");
+  if (!input || !lista) return;
+
+  // 👉 Evento al escribir (muestra sugerencias)
+  input.addEventListener("input", () => {
+    const texto = input.value.toLowerCase().trim();
+    lista.innerHTML = "";
+
+    if (!texto) {
+      lista.style.display = "none";
+      // Mostrar todos los productos si no hay texto
+      cards.forEach(card => card.style.display = "block");
+      return;
+    }
+
+    const palabras = texto.split(/\s+/);
+
+    const coincidencias = productos.filter(p => {
+      const nombre = (p.nombre || "").toLowerCase();
+      const tags   = (p.tags || "").toLowerCase();
+      return palabras.every(palabra =>
+        nombre.includes(palabra) || tags.includes(palabra)
+      );
+    });
+
+    if (coincidencias.length === 0) {
+      lista.style.display = "none";
+      return;
+    }
+
+    coincidencias.slice(0, 5).forEach((p) => {
+      const li = document.createElement("li");
+
+      // Resaltar coincidencias
+      let nombreResaltado = p.nombre;
+      palabras.forEach(palabra => {
+        const regex = new RegExp(`(${palabra})`, "gi");
+        nombreResaltado = nombreResaltado.replace(regex, "<strong>$1</strong>");
+      });
+
+      li.innerHTML = nombreResaltado;
+      li.addEventListener("click", () => {
+        // 👉 Filtrar galería al hacer clic en sugerencia
+        cards.forEach((card, i) => {
+          const nombre = (productos[i].nombre || "").toLowerCase();
+          const tags   = (productos[i].tags || "").toLowerCase();
+          const match = palabras.every(palabra =>
+            nombre.includes(palabra) || tags.includes(palabra)
+          );
+          card.style.display = match ? "block" : "none";
+        });
+        lista.style.display = "none";
+      });
+      lista.appendChild(li);
+    });
+
+    lista.style.display = "block";
+  });
+
+  // 👉 Evento al presionar Enter (filtra galería)
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      const texto = input.value.toLowerCase().trim();
+      if (!texto) {
+        cards.forEach(card => card.style.display = "block");
+        return;
+      }
+
+      const palabras = texto.split(/\s+/);
+
+      cards.forEach((card, i) => {
+        const nombre = (productos[i].nombre || "").toLowerCase();
+        const tags   = (productos[i].tags || "").toLowerCase();
+        const match = palabras.every(palabra =>
+          nombre.includes(palabra) || tags.includes(palabra)
+        );
+        card.style.display = match ? "block" : "none";
+      });
+
+      lista.style.display = "none";
+    }
+  });
+
+  // 👉 Ocultar lista al hacer clic fuera
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".buscador")) {
+      lista.style.display = "none";
+    }
+  });
+}
+
+
+    
     inicializarCopiarDesdeGaleria(productos);
 
   } catch (err) {
@@ -161,6 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     link.addEventListener("click", () => sidebar.classList.remove("active"));
   });
 });
+
 
 
 
