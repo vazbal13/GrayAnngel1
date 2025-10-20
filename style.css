@@ -446,3 +446,53 @@ footer {
 .dot.activo {
   background-color: var(--dorado);
 }
+/* Barra de buscar */
+.buscador {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.buscador input {
+  width: 90%;
+  max-width: 400px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--grisClaro);
+  border-radius: 30px;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.buscador input:focus {
+  box-shadow: 0 0 0 2px var(--dorado);
+}
+
+.sugerencias {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  background: #fff;
+  border: 1px solid var(--grisClaro);
+  border-radius: 10px;
+  margin-top: 0.3rem;
+  list-style: none;
+  padding: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: none;
+}
+
+.sugerencias li {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sugerencias li:hover {
+  background: var(--grisClaro);
+}
+
