@@ -68,8 +68,7 @@ async function cargarDetalle() {
       actualizarImagen();
     });
 
-    let startX = 0;
-let endX = 0;
+let startX = 0;
 const carrusel = document.querySelector(".carrusel");
 
 carrusel.addEventListener("touchstart", e => {
@@ -77,14 +76,15 @@ carrusel.addEventListener("touchstart", e => {
 }, { passive: true });
 
 carrusel.addEventListener("touchmove", e => {
-  // Evita que la pantalla se desplace verticalmente
+  // Evita que se mueva horizontalmente la imagen
   e.preventDefault();
 }, { passive: false });
 
 carrusel.addEventListener("touchend", e => {
-  endX = e.changedTouches[0].clientX;
+  const endX = e.changedTouches[0].clientX;
   const diff = endX - startX;
 
+  // Solo cambiar si el swipe es suficientemente largo
   if (Math.abs(diff) > 50) {
     indice = diff > 0
       ? (indice - 1 + imagenes.length) % imagenes.length
@@ -92,6 +92,7 @@ carrusel.addEventListener("touchend", e => {
     actualizarImagen();
   }
 });
+
 
 
   } catch (err) {
@@ -113,4 +114,5 @@ function actualizarImagen() {
 }
 
 document.addEventListener("DOMContentLoaded", cargarDetalle);
+
 
