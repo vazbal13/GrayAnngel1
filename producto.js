@@ -122,7 +122,30 @@ function actualizarImagen() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", cargarDetalle);
+document.addEventListener("DOMContentLoaded", () => {
+  cargarDetalle();
+  inicializarCopiarPedido();
+});
+
+
+function inicializarCopiarPedido() {
+  const btn = document.getElementById("copiar-pedido");
+  const toast = document.getElementById("toast");
+
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const nombre = document.getElementById("nombre-producto").textContent;
+    const precio = document.getElementById("precio-producto").textContent;
+
+    const texto = `Hola, me interesa el modelo:\n${nombre}\n${precio}`;
+    navigator.clipboard.writeText(texto).then(() => {
+      // Mostrar aviso
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    });
+  });
+}
 
 
 
