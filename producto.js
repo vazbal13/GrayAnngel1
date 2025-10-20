@@ -69,29 +69,38 @@ async function cargarDetalle() {
     });
 
 let startX = 0;
+let startY = 0;
 const carrusel = document.querySelector(".carrusel");
 
 carrusel.addEventListener("touchstart", e => {
   startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
 }, { passive: true });
 
 carrusel.addEventListener("touchmove", e => {
-  // Evita que se mueva horizontalmente la imagen
-  e.preventDefault();
+  const currentX = e.touches[0].clientX;
+  const currentY = e.touches[0].clientY;
+  const diffX = currentX - startX;
+  const diffY = currentY - startY;
+
+  // Si el movimiento es más horizontal que vertical → bloqueamos scroll
+  if (Math.abs(diffX) > Math.abs(diffY)) {
+    e.preventDefault();
+  }
 }, { passive: false });
 
 carrusel.addEventListener("touchend", e => {
   const endX = e.changedTouches[0].clientX;
-  const diff = endX - startX;
+  const diffX = endX - startX;
 
-  // Solo cambiar si el swipe es suficientemente largo
-  if (Math.abs(diff) > 50) {
-    indice = diff > 0
+  if (Math.abs(diffX) > 50) {
+    indice = diffX > 0
       ? (indice - 1 + imagenes.length) % imagenes.length
       : (indice + 1) % imagenes.length;
     actualizarImagen();
   }
 });
+
 
 
 
@@ -114,5 +123,6 @@ function actualizarImagen() {
 }
 
 document.addEventListener("DOMContentLoaded", cargarDetalle);
+
 
 
