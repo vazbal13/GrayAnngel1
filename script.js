@@ -23,7 +23,7 @@ async function cargarCatalogo() {
           <p>${p.precio}</p>
         </a>
         <div class="card-actions">
-          <button class="btn-mini copiar-ref" data-id="${index}">📋 Copiar pedido</button>
+          <button class="btn-mini copiar-ref" data-id="${index}">📋 Copiar </button>
         </div>
       `;
       gal.appendChild(card);
@@ -260,6 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     link.addEventListener("click", () => sidebar.classList.remove("active"));
   });
 });
+
 
 
 
