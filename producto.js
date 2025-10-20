@@ -68,41 +68,39 @@ async function cargarDetalle() {
       actualizarImagen();
     });
 
-let startX = 0;
-let startY = 0;
-const carrusel = document.querySelector(".carrusel");
+    // Swipe táctil optimizado
+    let startX = 0;
+    let startY = 0;
+    const carrusel = document.querySelector(".carrusel");
 
-carrusel.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-  startY = e.touches[0].clientY;
-}, { passive: true });
+    carrusel.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
 
-carrusel.addEventListener("touchmove", e => {
-  const currentX = e.touches[0].clientX;
-  const currentY = e.touches[0].clientY;
-  const diffX = currentX - startX;
-  const diffY = currentY - startY;
+    carrusel.addEventListener("touchmove", e => {
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
 
-  // Si el movimiento es más horizontal que vertical → bloqueamos scroll
-  if (Math.abs(diffX) > Math.abs(diffY)) {
-    e.preventDefault();
-  }
-}, { passive: false });
+      const angulo = Math.abs(Math.atan2(diffY, diffX) * (180 / Math.PI));
+      if (angulo < 30) {
+        e.preventDefault(); // Solo si el gesto es claramente horizontal
+      }
+    }, { passive: false });
 
-carrusel.addEventListener("touchend", e => {
-  const endX = e.changedTouches[0].clientX;
-  const diffX = endX - startX;
+    carrusel.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+      const diffX = endX - startX;
 
-  if (Math.abs(diffX) > 50) {
-    indice = diffX > 0
-      ? (indice - 1 + imagenes.length) % imagenes.length
-      : (indice + 1) % imagenes.length;
-    actualizarImagen();
-  }
-});
-
-
-
+      if (Math.abs(diffX) > 50) {
+        indice = diffX > 0
+          ? (indice - 1 + imagenes.length) % imagenes.length
+          : (indice + 1) % imagenes.length;
+        actualizarImagen();
+      }
+    });
 
   } catch (err) {
     console.error("Error al cargar detalle:", err);
@@ -122,12 +120,6 @@ function actualizarImagen() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  cargarDetalle();
-  inicializarCopiarPedido();
-});
-
-
 function inicializarCopiarPedido() {
   const btn = document.getElementById("copiar-pedido");
   const toast = document.getElementById("toast");
@@ -137,15 +129,20 @@ function inicializarCopiarPedido() {
   btn.addEventListener("click", () => {
     const nombre = document.getElementById("nombre-producto").textContent;
     const precio = document.getElementById("precio-producto").textContent;
+    const url    = window.location.href;
 
-    const texto = `Hola, me interesa el modelo:\n${nombre}\n${precio}`;
+    const texto = `Hola, me interesa el modelo:\n${nombre}\n${precio}\n${url}`;
     navigator.clipboard.writeText(texto).then(() => {
-      // Mostrar aviso
       toast.classList.add("visible");
       setTimeout(() => toast.classList.remove("visible"), 2000);
     });
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  cargarDetalle();
+  inicializarCopiarPedido();
+});
 
 
 
